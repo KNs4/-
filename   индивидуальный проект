@@ -1,0 +1,81 @@
+applicants = []
+specialties = []
+with open('applicant.txt', 'r', encoding='utf-8') as file:
+    for line in file:
+        data = line.split()  # Разделяем строку на части используя пробел в качестве разделителя, можно указать иной разделитель
+        record = {
+            'фамилия': data[0],
+            'имя': data[1],
+            'отчество': data[2],
+            'пол': data[3],
+            'дата_рождения': data[4],
+            'специальность': data[5],
+            'стаж': int(data[6]),  # Преобразуем строку со стажем в целое число
+            'языки': data[7].split(','),  # Преобразуем строку с языками в список
+            'оклад': int(data[8])  # Преобразуем строку с окладом в целое число
+        }
+        if data[5] not in specialties:
+            specialties.append(data[5])
+        applicants.append(record)
+
+
+# Функция для создания отчета: полный список всех соискателей, отсортированный по специальности + фамилии
+def full_list_sorted(applicants):
+    sorted_applicants = sorted(applicants, key=lambda x: (x['специальность'], x['фамилия']))
+    return sorted_applicants
+
+
+# Функция для создания отчета: список соискателей определенной специальности, отсортированный по стажу, полу и фамилии
+def filtered_list_by_specialty(applicants, specialty):
+    filtered_applicants = [applicant for applicant in applicants if applicant['специальность'] == specialty]
+    sorted_filtered = sorted(filtered_applicants, key=lambda x: (-x['стаж'], x['пол'], x['фамилия']))
+    return sorted_filtered
+
+
+# Функция для создания отчета: список соискателей с окладом в заданном диапазоне, отсортированный по окладу и фамилии
+def filtered_list_by_salary_range(applicants, min_salary, max_salary):
+    filtered_applicants = [applicant for applicant in applicants if min_salary <= applicant['оклад'] <= max_salary]
+    sorted_filtered = sorted(filtered_applicants, key=lambda x: (-x['оклад'], x['фамилия']))
+    return sorted_filtered
+
+
+# Записываем отсортированные данные в файлы
+
+with open('sorting_by_last_name+specialty.txt', 'w', encoding='utf-8') as f_out:
+    full_sorted = full_list_sorted(applicants)
+    f_out.write("Полный список всех соискателей, отсортированный по специальности(по возрастанию) + фамилии(по возрастанию):" + '\n')
+    for applicant in full_sorted:
+        f_out.write(' '.join(str(applicant[key]) for key in applicant) + '\n')
+
+specialty = (input('введите специальность из списка ' +str(specialties) + ':'))
+specialty = specialty.title().strip()
+with open('sorting_by_specialty.txt', 'w', encoding='utf-8') as f_out:
+    print(specialties)
+    while (specialty not in specialties):
+        print('Данной специальности нет в списке,пожалуйста,введите специальность из списка ' + str(specialties) + ':')
+        specialty = input('введите специальность из списка: ')
+        specialty = specialty.title().strip()
+    sorted_by_specialty = filtered_list_by_specialty(applicants, specialty)
+    f_out.write("список соискателей определенной специальности, отсортированный по стажу(по убыванию), полу(по убыванию) и фамилии(по возрастанию):" + '\n')
+    for applicant in sorted_by_specialty:
+        f_out.write(' '.join(str(applicant[key]) for key in applicant) + '\n')
+
+
+
+while True:  # Запускаем цикл пока мы не введем нормальный диапазон чисел
+    try:
+        min_salary, max_salary = map(int, input('введите диопазон желаемого оклада через пробел: ').split()) # Считываем введенное число с клавиатуры
+        print("Вы ввели диапазон желаемого оклада от",min_salary,'до',max_salary )
+        break
+    except ValueError:
+        print("Ошибка: введенное значение не является числом")
+
+with open('sorted_by_salary.txt', 'w', encoding='utf-8') as f_out:
+    if min_salary>max_salary:
+        sorted_by_salary = filtered_list_by_salary_range(applicants, max_salary, min_salary)
+    else:
+        sorted_by_salary = filtered_list_by_salary_range(applicants, min_salary, max_salary)
+    f_out.write("список соискателей с окладом в заданном диапазоне, отсортированный по окладу(по убыванию) и фамилии(по возрастанию):" + '\n')
+    for applicant in sorted_by_salary:
+        f_out.write(' '.join(str(applicant[key]) for key in applicant) + '\n')
+
