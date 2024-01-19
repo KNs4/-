@@ -50,7 +50,6 @@ with open('sorting_by_last_name+specialty.txt', 'w', encoding='utf-8') as f_out:
 specialty = (input('введите специальность из списка ' +str(specialties) + ':'))
 specialty = specialty.title().strip()
 with open('sorting_by_specialty.txt', 'w', encoding='utf-8') as f_out:
-    print(specialties)
     while (specialty not in specialties):
         print('Данной специальности нет в списке,пожалуйста,введите специальность из списка ' + str(specialties) + ':')
         specialty = input('введите специальность из списка: ')
@@ -65,7 +64,10 @@ with open('sorting_by_specialty.txt', 'w', encoding='utf-8') as f_out:
 while True:  # Запускаем цикл пока мы не введем нормальный диапазон чисел
     try:
         min_salary, max_salary = map(int, input('введите диопазон желаемого оклада через пробел: ').split()) # Считываем введенное число с клавиатуры
-        print("Вы ввели диапазон желаемого оклада от",min_salary,'до',max_salary )
+        if min_salary>max_salary:
+            print("Вы ввели диапазон желаемого оклада от",max_salary,'до',min_salary )
+        else:
+            print("Вы ввели диапазон желаемого оклада от",min_salary,'до',max_salary )
         break
     except ValueError:
         print("Ошибка: введенное значение не является числом")
@@ -78,4 +80,3 @@ with open('sorted_by_salary.txt', 'w', encoding='utf-8') as f_out:
     f_out.write("список соискателей с окладом в заданном диапазоне, отсортированный по окладу(по убыванию) и фамилии(по возрастанию):" + '\n')
     for applicant in sorted_by_salary:
         f_out.write(' '.join(str(applicant[key]) for key in applicant) + '\n')
-
