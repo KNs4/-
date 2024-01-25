@@ -19,8 +19,14 @@ with open('applicant.txt', 'r', encoding='utf-8') as file:
         if data[5] not in specialties:
             specialties.append(data[5])
         applicants.append(record)
+def print_database(applicants):
+    # Функция для вывода базы данных на экран
+    print("\nБаза данных о кадровом агентстве:")
+    for owner in applicants:
+        print(f"Фамилия:{owner['фамилия']},Имя: {owner['имя']},Отчество: {owner['отчество']},пол: {owner['пол']},дата_рождения: {owner['дата_рождения']}, специальность: {owner['специальность']},стаж: {owner['стаж']},язык: {owner['языки']}оклад: {owner['оклад']}")
 
-def add_entry(car_owners):
+
+def add_entry(applicants):
     # Функция для добавления новой записи в базу данных
     new_entry = {}
     new_entry["Фамилия"] = input("Введите фамилию: ")
@@ -105,7 +111,7 @@ while True:
     choice = input("Выберите действие (введите номер): ")
 
     if choice == "1":
-        print(applicants)
+        print_database(applicants)
     elif choice == "2":
         add_entry(applicants)
     elif choice == "3":
