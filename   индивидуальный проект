@@ -29,16 +29,16 @@ def print_database(applicants):
 def add_entry(applicants):
     # Функция для добавления новой записи в базу данных
     new_entry = {}
-    new_entry["Фамилия"] = input("Введите фамилию: ")
-    new_entry["Имя"] = input("Введите имя: ")
-    new_entry["Отчество"] = input("Введите отчество: ")
+    new_entry["фамилия"] = input("Введите фамилию: ")
+    new_entry["имя"] = input("Введите имя: ")
+    new_entry["отчество"] = input("Введите отчество: ")
     new_entry["пол"] = input("Введите пол: ")
     new_entry["дата_рождения"] = input("Введите дату рождения: ")
-    new_entry["специальность"] = float(input("Введите специальность: "))
+    new_entry["специальность"] = input("Введите специальность: ")
     new_entry["стаж"] = int(input("Введите стаж: "))
-    new_entry["языки"] = int(input("Введите языки: "))
+    new_entry["языки"] = input("Введите языки: ")
     new_entry["оклад"] = int(input("Введите оклад: "))
-    car_owners.append(new_entry)
+    applicants.append(new_entry)
     print("Запись успешно добавлена.")
 
 
