@@ -20,25 +20,56 @@ with open('applicant.txt', 'r', encoding='utf-8') as file:
             specialties.append(data[5])
         applicants.append(record)
 
-
 # Функция для создания отчета: полный список всех соискателей, отсортированный по специальности + фамилии
 def full_list_sorted(applicants):
-    sorted_applicants = sorted(applicants, key=lambda x: (x['специальность'], x['фамилия']))
-    return sorted_applicants
-
+    n = len(applicants)
+    left = 0
+    right = n - 1
+    while left <= right:
+        for i in range(left, right):
+            if (applicants[i]['специальность'], applicants[i]['фамилия']) > (applicants[i + 1]['специальность'], applicants[i + 1]['фамилия']):
+                applicants[i], applicants[i + 1] = applicants[i + 1], applicants[i]
+        right -= 1
+        for i in range(right, left, -1):
+            if (applicants[i]['специальность'], applicants[i]['фамилия']) < (applicants[i - 1]['специальность'], applicants[i - 1]['фамилия']):
+                applicants[i], applicants[i - 1] = applicants[i - 1], applicants[i]
+        left += 1
+    return applicants
 
 # Функция для создания отчета: список соискателей определенной специальности, отсортированный по стажу, полу и фамилии
 def filtered_list_by_specialty(applicants, specialty):
     filtered_applicants = [applicant for applicant in applicants if applicant['специальность'] == specialty]
-    sorted_filtered = sorted(filtered_applicants, key=lambda x: (-x['стаж'], x['пол'], x['фамилия']))
-    return sorted_filtered
+    n = len(filtered_applicants)
+    left = 0
+    right = n - 1
+    while left <= right:
+        for i in range(left, right):
+            if (filtered_applicants[i]['стаж'], filtered_applicants[i]['пол'], filtered_applicants[i]['фамилия']) < (filtered_applicants[i + 1]['стаж'], filtered_applicants[i + 1]['пол'], filtered_applicants[i + 1]['фамилия']):
+                filtered_applicants[i], filtered_applicants[i + 1] = filtered_applicants[i + 1], filtered_applicants[i]
+        right -= 1
+        for i in range(right, left, -1):
+            if (filtered_applicants[i]['стаж'], filtered_applicants[i]['пол'], filtered_applicants[i]['фамилия']) > (filtered_applicants[i - 1]['стаж'], filtered_applicants[i - 1]['пол'], filtered_applicants[i - 1]['фамилия']):
+                filtered_applicants[i], filtered_applicants[i - 1] = filtered_applicants[i - 1], filtered_applicants[i]
+        left += 1
+    return filtered_applicants
 
 
 # Функция для создания отчета: список соискателей с окладом в заданном диапазоне, отсортированный по окладу и фамилии
 def filtered_list_by_salary_range(applicants, min_salary, max_salary):
     filtered_applicants = [applicant for applicant in applicants if min_salary <= applicant['оклад'] <= max_salary]
-    sorted_filtered = sorted(filtered_applicants, key=lambda x: (-x['оклад'], x['фамилия']))
-    return sorted_filtered
+    n = len(filtered_applicants)
+    left = 0
+    right = n - 1
+    while left <= right:
+        for i in range(left, right):
+            if (filtered_applicants[i]['оклад'], filtered_applicants[i]['фамилия']) < (filtered_applicants[i + 1]['оклад'], filtered_applicants[i + 1]['фамилия']):
+                filtered_applicants[i], filtered_applicants[i + 1] = filtered_applicants[i + 1], filtered_applicants[i]
+        right -= 1
+        for i in range(right, left, -1):
+            if (filtered_applicants[i]['оклад'], filtered_applicants[i]['фамилия']) > (filtered_applicants[i - 1]['оклад'], filtered_applicants[i - 1]['фамилия']):
+                filtered_applicants[i], filtered_applicants[i - 1] = filtered_applicants[i - 1], filtered_applicants[i]
+        left += 1
+    return filtered_applicants
 
 
 # Записываем отсортированные данные в файлы
